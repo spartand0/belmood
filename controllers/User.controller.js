@@ -538,6 +538,7 @@ exports.NewPhone = async (req, res) => {
       } else {
         if (foundUser.Otp === otp) {
           foundUser.Otp = "";
+          foundUser.userPhoneNumber.Number = phoneNumber;
           foundUser.userPhoneNumber.isVerified = true;
           foundUser.userPhoneNumber.dateOfVerification = Date.now();
           foundUser.save();
@@ -565,7 +566,7 @@ exports.NewPhone = async (req, res) => {
       });
     }
   } catch (error) {
-    console.log(error)
+    console.log(error);
     res.status(500).send({
       message:
         "This error is coming from NewPhone endpoint, please report to the sys administrator !",
