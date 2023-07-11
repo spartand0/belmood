@@ -52,12 +52,6 @@ exports.createAccount = async (req, res) => {
     };
     user.userPhoneNumber.tries.push(attempt);
     user.save();
-    const body = `Your Belmood code: ${OTP}`;
-    const { status } = await twilio.messages.create({
-      body,
-      messagingServiceSid: "MGeed693cf748892254982edb50e1ff5ff",
-      to: `${phoneNumber}`,
-    });
     res.status(200).send({
       code: 200,
       success: true,
