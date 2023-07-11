@@ -144,7 +144,7 @@ exports.completeAccount = async (req, res) => {
   try {
     const token = req["cookies"]["x-belmood-token"];
     const user = jwt.verify(token, process.env.SECRET_KEY);
-    const { userFullName, email, DOB, gender, Photos, Selfie, Languages } = req.body;
+    const { userFullName, email, DOB, gender, Photos, Languages } = req.body;
     const foundUser = await UserModel.findOne({
       id: user.id,
     });
@@ -160,7 +160,6 @@ exports.completeAccount = async (req, res) => {
       (foundUser.userEmail.Email = email || ""),
       (foundUser.gender = gender || foundUser.gender);
     foundUser.Photos = Photos || [""];
-    foundUser.Selfie = Selfie || "";
     foundUser.DOB = DOB || "";
     foundUser.Languages = Languages || [""];
     await foundUser.save();
@@ -602,14 +601,13 @@ exports.editProfile = async (req, res) => {
         date: Date.now(),
       });
     }
-    const { userFullName, gender, Photos, email, number, Selfie } = req.body;
+    const { userFullName, gender, Photos, email, number } = req.body;
 
     foundUser.userFullName = userFullName || foundUser.userFullName;
     foundUser.userEmail.Email = email || foundUser.userEmail.Email;
     foundUser.gender = gender || foundUser.gender;
     foundUser.Photos = Photos || foundUser.Photos;
     foundUser.userPhoneNumber.Number = number || foundUser.userPhoneNumber.Number;
-    foundUser.Selfie = Selfie || foundUser.Selfie;
 
     const notification = {
       id: uuidv4(),
