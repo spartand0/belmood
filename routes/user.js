@@ -8,6 +8,9 @@ const {
   verifyOtp,
   createAccountverifyOtp,
   completeAccount,
+  recoverAccount,
+  confirmRecover,
+  NewPhone,
 } = require("../controllers/User.controller");
 const { isUser } = require("../middlewares/User/isUser");
 
@@ -20,9 +23,11 @@ User.post("/login", use(AuthUser), use(createAccount));
 User.post("/updateAccount", use(isUser), use(completeAccount));
 User.post("/verifyOtp", use(isUser), use(verifyOtp));
 User.post("/sendOtp", use(sendOtp));
+User.post("/recoverAccount", use(recoverAccount));
+User.post("/confirmRecover", use(confirmRecover));
+User.post("/newPhone", use(isUser), use(NewPhone));
+// Edit user
 User.post("/editProfile", use(isUser), use(editProfile));
-
-// POST
 
 // GET
 
