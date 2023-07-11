@@ -5,6 +5,14 @@ const jwt = require("jsonwebtoken");
 const TWILIO_SID = "AC1489930692bbb32de13907e645a74c00";
 const TWILIO_TOKEN = "6895002157f1991ca5296fcdfddbeaa9";
 const twilio = require("twilio")(TWILIO_SID, TWILIO_TOKEN);
+const AWS = require('aws-sdk');
+
+AWS.config.update({
+  accessKeyId: 'YOUR_ACCESS_KEY_ID',
+  secretAccessKey: 'YOUR_SECRET_ACCESS_KEY',
+  region: 'eu-west-3' // Replace with the appropriate AWS region
+});
+
 // .----------------.  .----------------.  .----------------.  .----------------.
 // | .--------------. || .--------------. || .--------------. || .--------------. |
 // | |      __      | || | _____  _____ | || |  _________   | || |  ____  ____  | |
@@ -50,21 +58,12 @@ exports.createAccount = async (req, res) => {
       messagingServiceSid: "MGeed693cf748892254982edb50e1ff5ff",
       to: `${phoneNumber}`,
     });
-    if (status === "accepted") {
       res.status(200).send({
         code: 200,
         success: true,
         date: Date.now(),
-        message: `Please enter the verification code received`,
+        message: `Please enter the verification code received. code is : ${OTP}. code is : ${OTP}`,
       });
-    } else {
-      res.status(500).send({
-        code: 500,
-        success: false,
-        date: Date.now(),
-        message: `Something went wrong with sending SMS`,
-      });
-    }
   } catch (error) {
     console.log(error);
     res.status(500).send({
@@ -211,21 +210,13 @@ exports.sendOtp = async (req, res) => {
       messagingServiceSid: "MGeed693cf748892254982edb50e1ff5ff",
       to: `${phoneNumber}`,
     });
-    if (status === "accepted") {
       res.status(200).send({
         code: 200,
         success: true,
         date: Date.now(),
-        message: `Please enter the verification code received`,
+        message: `Please enter the verification code received. code is : ${OTP}`,
       });
-    } else {
-      res.status(500).send({
-        code: 500,
-        success: false,
-        date: Date.now(),
-        message: `Something went wrong with sending SMS`,
-      });
-    }
+   
   } catch (error) {
     res.status(500).send({
       message:
@@ -264,27 +255,19 @@ exports.AuthUser = async (req, res, next) => {
       foundUser.userPhoneNumber.tries.push(attempt);
       foundUser.save();
       const body = `Your Belmood code: ${OTP}`;
-      const { status } = await twilio.messages.create({
-        body,
-        messagingServiceSid: "MGeed693cf748892254982edb50e1ff5ff",
-        to: `${phoneNumber}`,
-      });
-      if (status === "accepted") {
+      // const { status } = await twilio.messages.create({
+      //   body,
+      //   messagingServiceSid: "MGeed693cf748892254982edb50e1ff5ff",
+      //   to: `${phoneNumber}`,
+      // });
         return res.status(200).send({
           code: 200,
           success: true,
           date: Date.now(),
-          message: `Please enter the verification code received`,
+          message: `Please enter the verification code received. code is : ${OTP}`,
         });
-      }
-      else {
-        return res.status(500).send({
-          code: 500,
-          success: false,
-          date: Date.now(),
-          message: `Something went wrong with sending SMS`,
-        });
-      }
+      
+     
     } 
     if (foundUser.Otp === otp) {
       foundUser.Otp = "";

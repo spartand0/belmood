@@ -25,6 +25,7 @@
   },
   "homepage": "https://github.com/spartand0/belmood-backend#readme",
   "dependencies": {
+    "aws-sdk": "^2.1414.0",
     "bcrypt": "^5.1.0",
     "body-parser": "^1.20.1",
     "cookie-parser": "^1.4.6",
